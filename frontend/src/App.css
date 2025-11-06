@@ -1,0 +1,33 @@
+/* Additional custom styles beyond Tailwind */
+.app-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.component-card {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.component-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.btn-primary {
+  @apply bg-primary text-white font-bold py-2 px-4 rounded;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.btn-primary:hover {
+  @apply bg-primary-dark;
+}
+
+.btn-secondary {
+  @apply bg-secondary text-white font-bold py-2 px-4 rounded;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.btn-secondary:hover {
+  @apply bg-secondary-dark;
+}

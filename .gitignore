@@ -1,0 +1,3 @@
+# Ignore Node.js dependencies (not needed in repo or Railway)
+node_modules/
+**/node_modules/

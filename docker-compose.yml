@@ -1,0 +1,52 @@
+version: "3.9"
+services:
+  postgres:
+    image: postgres:15
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: buildgenie_db
+      POSTGRES_USER: buildgenie_user
+      POSTGRES_PASSWORD: password123
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  ai-service:
+    build: ./ai-service
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_URL: postgresql://buildgenie_user:password123@postgres/buildgenie_db
+      BUILDGENIE_MODEL_PATH: buildgenie_pipeline.joblib
+      PORT: 5001
+    ports:
+      - "5001:5001"
+
+  backend:
+    build: ./backend
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/buildgenie_db
+      SPRING_DATASOURCE_USERNAME: buildgenie_user
+      SPRING_DATASOURCE_PASSWORD: password123
+      PORT: 8080
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build: ./frontend
+    depends_on:
+      - backend
+      - ai-service
+    environment:
+      PORT: 3000
+      # If your frontend uses env at build time, set REACT_APP_* here and rebuild
+      # REACT_APP_API_BASE: http://backend:8080
+      # REACT_APP_AI_API: http://ai-service:5001
+    ports:
+      - "3000:3000"
+
+volumes:
+  db-data:
