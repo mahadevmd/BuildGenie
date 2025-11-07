@@ -24,9 +24,27 @@ public class ForecastService {
         this.restTemplate = restTemplate;
     }
 
+    private String resolvePredictUrl(String base) {
+        if (base == null || base.isEmpty()) {
+            return "/predict";
+        }
+        String trimmed = base.trim();
+        if (trimmed.endsWith("/predict")) {
+            return trimmed;
+        }
+        if (trimmed.endsWith("/")) {
+            return trimmed + "predict";
+        }
+        return trimmed + "/predict";
+    }
+
     public PredictionResponse getPrediction(ForecastRequest request) {
         try {
-            log.info("Requesting AI prediction at {}", aiServiceUrl);
+            String predictUrl = resolvePredictUrl(aiServiceUrl);
+            if (!predictUrl.equals(aiServiceUrl)) {
+                log.warn("Normalized AI URL from '{}' to '{}'. Ensure env var includes '/predict'.", aiServiceUrl, predictUrl);
+            }
+            log.info("Requesting AI prediction at {}", predictUrl);
             log.debug("ForecastRequest payload: cpuModel={}, cpuBoostClockGhz={}, gpuModel={}, gpuVramGb={}, ramSizeGb={}, ramSpeedMhz={}, storageType={}",
                     request.getCpuModel(),
                     request.getCpuBoostClockGhz(),
@@ -36,7 +54,7 @@ public class ForecastService {
                     request.getRamSpeedMhz(),
                     request.getStorageType());
             ResponseEntity<PredictionResponse> response =
-                    restTemplate.postForEntity(aiServiceUrl, request, PredictionResponse.class);
+                    restTemplate.postForEntity(predictUrl, request, PredictionResponse.class);
             PredictionResponse body = response.getBody();
             if (body == null) {
                 log.warn("AI service returned empty body with status {}", response.getStatusCode());
