@@ -54,28 +54,58 @@ def predict():
         return jsonify({"error": "Invalid JSON payload"}), 400
 
     use_history = str(request.args.get("use_history", "false")).lower() in {"true", "1", "yes"}
+    
+    # Ensure required features exist by applying sensible defaults
+    required_cat = ["cpu_model", "gpu_model", "storage_type"]
+    required_num = ["cpu_boost_clock_ghz", "gpu_vram_gb", "ram_size_gb", "ram_speed_mhz"]
+    defaults = {
+        "cpu_boost_clock_ghz": 4.2,
+        "gpu_vram_gb": 8,
+        "ram_size_gb": 16,
+        "ram_speed_mhz": 3200,
+    }
+    # Fill missing categorical values
+    for col in required_cat:
+        if payload.get(col) is None:
+            logger.debug(f"Missing categorical feature '{col}', defaulting to 'Unknown'")
+            payload[col] = "Unknown"
+    # Fill missing numeric values
+    for col in required_num:
+        if payload.get(col) is None:
+            logger.debug(f"Missing numeric feature '{col}', defaulting to {defaults.get(col)}")
+            payload[col] = defaults.get(col)
 
     # Convert single JSON object into a one-row DataFrame
     df = pd.DataFrame([payload])
 
-    try:
-        # Try history first if requested
-        if use_history:
+    # Try history first if requested, but do not fail if DB is unavailable
+    if use_history:
+        try:
             hist = get_historical_prediction(payload)
-            if hist:
-                logger.info("Using historical prediction from ai_predictions")
-                return jsonify(hist), 200
+        except Exception as e:
+            logger.warning(f"History lookup failed, continuing with model: {e}")
+            hist = None
+        if hist:
+            logger.info("Using historical prediction from ai_predictions")
+            return jsonify(hist), 200
 
-        # If no history or not requested, require model
-        if pipeline is None:
-            logger.error("Model not loaded and no historical prediction available")
-            return jsonify({"error": "Model not loaded and no historical prediction"}), 500
+    # If no history or not requested, require model
+    if pipeline is None:
+        logger.error("Model not loaded and no historical prediction available")
+        return jsonify({"error": "Model not loaded and no historical prediction"}), 500
 
+    try:
         preds = pipeline.predict(df)
         fps = float(preds[0])
+    except Exception as e:
+        logger.error(f"Model prediction failed: {e}")
+        return jsonify({"error": f"Prediction failed: {e}"}), 500
+
+    # Best-effort save to DB, but do not fail the request if save fails
+    try:
         save_prediction(payload, fps)
     except Exception as e:
-        return jsonify({"error": f"Prediction failed: {e}"}), 500
+        logger.warning(f"Failed to save prediction to DB, returning model result anyway: {e}")
 
     benchmark_score = round(fps * 120, 2)
     performance_rating = f"{fps / 20:.1f}"
