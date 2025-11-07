@@ -14,4 +14,4 @@ COPY --from=builder /app/build /app/build
 
 # Do NOT set a fixed PORT; Railway injects PORT dynamically
 # EXPOSE is optional and not required on Railway
-ENTRYPOINT ["sh", "-c", "serve -s build -l tcp://0.0.0.0:${PORT}"]
+ENTRYPOINT ["sh", "-c", "serve -s build -l ${PORT:-3000}"]
