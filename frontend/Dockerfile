@@ -12,6 +12,6 @@ WORKDIR /app
 RUN npm i -g serve
 COPY --from=builder /app/build /app/build
 
-ENV PORT=3000
-EXPOSE 3000
+# Do NOT set a fixed PORT; Railway injects PORT dynamically
+# EXPOSE is optional and not required on Railway
 ENTRYPOINT ["sh", "-c", "serve -s build -l tcp://0.0.0.0:${PORT}"]
