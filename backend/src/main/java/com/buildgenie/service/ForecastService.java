@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestClientResponseException;
 
 @Service
 public class ForecastService {
@@ -25,11 +26,30 @@ public class ForecastService {
 
     public PredictionResponse getPrediction(ForecastRequest request) {
         try {
+            log.info("Requesting AI prediction at {}", aiServiceUrl);
+            log.debug("ForecastRequest payload: cpuModel={}, cpuBoostClockGhz={}, gpuModel={}, gpuVramGb={}, ramSizeGb={}, ramSpeedMhz={}, storageType={}",
+                    request.getCpuModel(),
+                    request.getCpuBoostClockGhz(),
+                    request.getGpuModel(),
+                    request.getGpuVramGb(),
+                    request.getRamSizeGb(),
+                    request.getRamSpeedMhz(),
+                    request.getStorageType());
             ResponseEntity<PredictionResponse> response =
                     restTemplate.postForEntity(aiServiceUrl, request, PredictionResponse.class);
-            return response.getBody();
+            PredictionResponse body = response.getBody();
+            if (body == null) {
+                log.warn("AI service returned empty body with status {}", response.getStatusCode());
+                return new PredictionResponse(0.0, 0.0, "N/A");
+            }
+            log.info("AI prediction response: fps={}, benchmark={}, rating={}",
+                    body.getPredictedFps(), body.getBenchmarkScore(), body.getPerformanceRating());
+            return body;
+        } catch (RestClientResponseException e) {
+            log.error("AI service call failed: status={} body={}", e.getRawStatusCode(), e.getResponseBodyAsString());
+            return new PredictionResponse(0.0, 0.0, "N/A");
         } catch (Exception e) {
-            log.error("Failed to get prediction from AI service", e);
+            log.error("Failed to get prediction from AI service: {}", e.getMessage(), e);
             PredictionResponse fallback = new PredictionResponse(0.0, 0.0, "N/A");
             return fallback;
         }

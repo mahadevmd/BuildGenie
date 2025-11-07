@@ -15,7 +15,6 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './contexts/AuthContext';
-import HealthCheck from './components/HealthCheck';
 import './App.css';
 
 function App() {
@@ -24,7 +23,6 @@ function App() {
       <Router>
         <div className="flex flex-col min-h-screen">
           <Header />
-          <HealthCheck />
           <main className="flex-grow">
             <Routes>
               <Route path="/" element={<Home />} />
