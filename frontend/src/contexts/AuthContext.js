@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import axios from 'axios';
+import { apiClient } from '../services/api';
 
 const AuthContext = createContext();
 
@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
     if (token && username) {
       setCurrentUser({ username });
       // Set authorization header for all future requests
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     }
     
     setLoading(false);
@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }) => {
   const register = async (username, email, password) => {
     try {
       setError('');
-      const response = await axios.post('/api/auth/register', {
+      const response = await apiClient.post('/api/auth/register', {
         username,
         email,
         password
@@ -40,7 +40,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem('username', user);
         
         // Set authorization header for all future requests
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         
         setCurrentUser({ username: user });
         return { success: true };
@@ -58,7 +58,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (username, password) => {
     try {
       setError('');
-      const response = await axios.post('/api/auth/login', {
+      const response = await apiClient.post('/api/auth/login', {
         username,
         password
       });
@@ -70,7 +70,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem('username', user);
         
         // Set authorization header for all future requests
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         
         setCurrentUser({ username: user });
         return { success: true };
@@ -88,7 +88,7 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('username');
-    delete axios.defaults.headers.common['Authorization'];
+    delete apiClient.defaults.headers.common['Authorization'];
     setCurrentUser(null);
   };
 

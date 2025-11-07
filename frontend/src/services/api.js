@@ -6,12 +6,13 @@ import {
   getPreBuiltConfigsByCategory as getMockPreBuiltConfigsByCategory
 } from '../mock';
 
-const API_URL = '';
+// Use deployed backend base URL in production; fall back to proxy in dev
+const API_URL = (process.env.REACT_APP_API_BASE || '').trim();
 const USE_MOCK_DATA = false; // Toggle between mock data and real API
 
 // Create axios instance with base URL
 const apiClient = axios.create({
-  baseURL: API_URL, // empty to rely on CRA proxy
+  baseURL: API_URL || undefined, // undefined lets CRA dev proxy handle it
   headers: {
     'Content-Type': 'application/json'
   }
@@ -209,3 +210,6 @@ export default {
   buildService,
   forecastService
 };
+
+// Export client for use in AuthContext and other modules
+export { apiClient };
