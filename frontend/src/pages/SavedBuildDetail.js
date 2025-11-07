@@ -123,14 +123,41 @@ const SavedBuildDetail = () => {
           return 512;
         };
 
+        const parseCpuClockGhz = (specs) => {
+          if (!specs) return 4.2;
+          const m = String(specs).match(/([0-9]+(?:\.[0-9]+)?)\s*GHz/i);
+          return m ? parseFloat(m[1]) : 4.2;
+        };
+
+        const parseGpuVramGb = (memory) => {
+          if (!memory) return 8;
+          const m = String(memory).match(/(\d+)\s*GB/i);
+          return m ? parseInt(m[1], 10) : 8;
+        };
+
+        const parseRamSpeedMhz = (speed) => {
+          if (!speed) return 3200;
+          // Accept formats like "DDR5-5200" or "3200 MHz"
+          const m = String(speed).match(/(\d{3,5})\s*(MHz)?/i);
+          return m ? parseInt(m[1], 10) : 3200;
+        };
+
+        const inferStorageType = (iface, name) => {
+          const s = (iface || name || '').toUpperCase();
+          if (s.includes('NVME') || s.includes('PCIe')) return 'NVMe';
+          if (s.includes('SATA')) return 'SSD';
+          if (s.includes('HDD')) return 'HDD';
+          return 'Unknown';
+        };
+
         const request = {
-          gpu_model: gpu?.model || gpu?.name || 'Unknown GPU',
           cpu_model: cpu?.model || cpu?.name || 'Unknown CPU',
-          ram_gb: parseRamGb(ram?.details?.capacity),
-          storage_gb: parseStorageGb(storage?.details?.capacity),
-          target_game: (build?.category || 'Generic').toString(),
-          resolution: '1080p',
-          graphics_quality: (build?.category === 'Gaming' ? 'high' : 'medium'),
+          cpu_boost_clock_ghz: parseCpuClockGhz(cpu?.details?.specs || cpu?.details?.clockSpeed),
+          gpu_model: gpu?.model || gpu?.name || 'Unknown GPU',
+          gpu_vram_gb: parseGpuVramGb(gpu?.details?.memory),
+          ram_size_gb: parseRamGb(ram?.details?.capacity),
+          ram_speed_mhz: parseRamSpeedMhz(ram?.details?.speed),
+          storage_type: inferStorageType(storage?.details?.interface, storage?.name),
         };
 
         const prediction = await forecastService.predict(request);
