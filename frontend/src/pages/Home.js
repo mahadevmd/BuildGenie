@@ -124,7 +124,7 @@ const Home = () => {
               </CardHeader>
               <CardContent>
                 <p className="text-gray-400 font-light mb-4">Great performance for everyday tasks and casual gaming at a lower price point.</p>
-                <p className="font-bold text-lg text-primary">Starting at $599</p>
+                <p className="font-bold text-lg text-primary">Starting at Rs 599</p>
               </CardContent>
               <CardFooter>
                 <Link
@@ -143,7 +143,7 @@ const Home = () => {
               </CardHeader>
               <CardContent>
                 <p className="text-gray-400 font-light mb-4">Stable and efficient systems for productivity and business applications.</p>
-                <p className="font-bold text-lg text-primary">Starting at $699</p>
+                <p className="font-bold text-lg text-primary">Starting at Rs 699</p>
               </CardContent>
               <CardFooter>
                 <Link
@@ -162,7 +162,7 @@ const Home = () => {
               </CardHeader>
               <CardContent>
                 <p className="text-gray-400 font-light mb-4">High-end components for content creation, 3D rendering, and development.</p>
-                <p className="font-bold text-lg text-primary">Starting at $1499</p>
+                <p className="font-bold text-lg text-primary">Starting at Rs 1499</p>
               </CardContent>
               <CardFooter>
                 <Link

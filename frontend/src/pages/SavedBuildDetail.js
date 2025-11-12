@@ -321,7 +321,7 @@ const SavedBuildDetail = () => {
                       {c.description && <div className="mt-1">{c.description}</div>}
                     </div>
                   )}
-                  <div className="mt-2 font-bold text-primary">${c.price}</div>
+                  <div className="mt-2 font-bold text-primary">Rs {c.price}</div>
                 </div>
               ))}
             </div>
@@ -338,11 +338,11 @@ const SavedBuildDetail = () => {
               </div>
               <div className="flex justify-between">
                 <span className="font-medium">Saved Price:</span>
-                <span>${build.totalPrice?.toFixed ? build.totalPrice.toFixed(2) : Number(build.totalPrice || 0).toFixed(2)}</span>
+                <span>Rs {build.totalPrice?.toFixed ? build.totalPrice.toFixed(2) : Number(build.totalPrice || 0).toFixed(2)}</span>
               </div>
               <div className="flex justify-between">
                 <span className="font-medium">Computed Price:</span>
-                <span>${computedPrice.toFixed(2)}</span>
+                <span>Rs {computedPrice.toFixed(2)}</span>
               </div>
               {build.totalWattage !== undefined && (
                 <div className="flex justify-between">

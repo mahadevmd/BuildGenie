@@ -173,7 +173,7 @@ const SavedBuilds = () => {
                 <div className="flex justify-between items-start mb-2">
                   <h2 className="text-xl font-semibold text-white">{build.name || 'Custom Build'}</h2>
                   <span className="bg-primary text-white px-2 py-1 rounded text-sm font-medium">
-                    ${Number(build._price || 0).toFixed(2)}
+                    Rs {Number(build._price || 0).toFixed(2)}
                   </span>
                 </div>
                 <p className="text-gray-400 text-sm mb-2">Category: {build.category || 'Custom'}</p>

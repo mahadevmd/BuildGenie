@@ -151,7 +151,7 @@ const Builder = () => {
                         <div className="flex items-center">
                           <img src={componentImages[type] || component.imageUrl || 'https://via.placeholder.com/30'} alt={component.name} className="w-8 h-8 mr-4 object-cover rounded-md" />
                           <div className="flex flex-col">
-                            <span className="font-medium">{component.name} - ${component.price}</span>
+                            <span className="font-medium">{component.name} - Rs {component.price}</span>
                             {component.description && (
                               <span className="text-xs text-gray-400 mt-1">{component.description}</span>
                             )}
@@ -207,8 +207,8 @@ const Builder = () => {
                   </span>
                 </div>
                 {selectedComponents[type] && (
-                  <div className="flex justify-end mt-1">
-                    <span className="text-primary font-bold">${selectedComponents[type].price}</span>
+                    <div className="flex justify-end mt-1">
+                    <span className="text-primary font-bold">Rs {selectedComponents[type].price}</span>
                   </div>
                 )}
                 {selectedComponents[type]?.description && (
@@ -220,9 +220,9 @@ const Builder = () => {
             ))}
             
             <div className="mt-6 pt-4 border-t border-primary/10 space-y-2">
-              <div className="flex justify-between items-center">
+                <div className="flex justify-between items-center">
                 <span className="text-xl font-bold text-white">Total Price:</span>
-                <span className="text-xl font-bold text-primary">${totalPrice.toFixed(2)}</span>
+                <span className="text-xl font-bold text-primary">Rs {totalPrice.toFixed(2)}</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-lg font-medium text-gray-300">Estimated Wattage:</span>
