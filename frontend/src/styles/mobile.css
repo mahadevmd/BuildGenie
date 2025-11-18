@@ -1,0 +1,226 @@
+/* Mobile-specific adjustments */
+.mobile-safe-area {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Better touch targets for mobile */
+.mobile-touch-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Improved scrolling for mobile */
+.mobile-scroll-container {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+/* Hide scrollbars on mobile for cleaner look */
+.mobile-scroll-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* Capacitor-specific adjustments */
+.capacitor-platform-ios {
+  /* iOS specific adjustments */
+}
+
+.capacitor-platform-android {
+  /* Android specific adjustments */
+}
+
+/* Mobile-specific form adjustments */
+@media (max-width: 768px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .form-input {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+
+  .button {
+    min-height: 44px; /* iOS touch target minimum */
+  }
+
+  /* Improve spacing for touch interfaces */
+  .btn {
+    padding: 12px 20px;
+    margin: 8px 0;
+  }
+
+  /* Better spacing for cards on mobile */
+  .card {
+    margin: 12px 0;
+  }
+
+  /* Responsive grid adjustments */
+  .grid-cols-3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .grid-cols-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* Better modal spacing on mobile */
+  .modal {
+    padding: 20px;
+    margin: 10px;
+  }
+
+  /* Responsive text sizes */
+  h1 {
+    font-size: 1.75rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+  }
+
+  /* Better navigation for mobile */
+  .nav-link {
+    padding: 16px;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  /* Better table responsiveness */
+  .table {
+    font-size: 14px;
+  }
+
+  .table th,
+  .table td {
+    padding: 8px;
+  }
+
+  /* Better spacing for forms */
+  .form-group {
+    margin-bottom: 16px;
+  }
+
+  /* Better component card layout */
+  .component-card {
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+
+  /* Better builder layout on mobile */
+  .builder-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  /* Better dropdown/select on mobile */
+  select {
+    font-size: 16px;
+    padding: 12px;
+  }
+
+  /* Better checkbox and radio button sizing */
+  input[type="checkbox"],
+  input[type="radio"] {
+    min-width: 20px;
+    min-height: 20px;
+  }
+}
+
+/* Small mobile devices */
+@media (max-width: 480px) {
+  .container {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  .grid-cols-2 {
+    grid-template-columns: 1fr;
+  }
+
+  /* Single column layout for very small screens */
+  .builder-sidebar {
+    width: 100%;
+  }
+
+  /* Better button layout */
+  .button-group {
+    flex-direction: column;
+  }
+
+  .button-group .btn {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+}
+
+/* Landscape mobile adjustments */
+@media (max-width: 768px) and (orientation: landscape) {
+  .mobile-safe-area {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: 0; /* Reduce bottom padding in landscape */
+  }
+
+  /* Better use of limited vertical space */
+  .hero-section {
+    padding: 2rem 1rem;
+  }
+
+  /* Compact header for landscape */
+  .header {
+    padding: 8px 16px;
+  }
+}
+
+/* Native app specific adjustments */
+@media (display-mode: standalone) {
+  /* Adjustments for when running as a standalone app */
+  .app-header {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .app-footer {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Capacitor status bar padding */
+.capacitor-status-bar-padding {
+  padding-top: env(safe-area-inset-top);
+}
+
+/* Better focus states for keyboard navigation on mobile */
+.btn:focus,
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Better loading states for mobile */
+.loading-spinner {
+  width: 24px;
+  height: 24px;
+  border-width: 3px;
+}
+
+/* Better error message display on mobile */
+.error-message {
+  padding: 12px;
+  margin: 8px 0;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+/* Better success message display on mobile */
+.success-message {
+  padding: 12px;
+  margin: 8px 0;
+  border-radius: 6px;
+  font-size: 14px;
+}
