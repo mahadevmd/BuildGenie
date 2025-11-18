@@ -1,5 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Capacitor } from '@capacitor/core';
+import { StatusBar, Style } from '@capacitor/status-bar';
+import { SplashScreen } from '@capacitor/splash-screen';
+import { isNativeMobile, getMobileSafeArea, getPlatformClass } from './utils/mobile';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Home from './pages/Home';
@@ -16,12 +20,41 @@ import Register from './pages/Register';
 import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './contexts/AuthContext';
 import './App.css';
+import './styles/mobile.css';
 
 function App() {
+  useEffect(() => {
+    const initializeMobile = async () => {
+      if (isNativeMobile()) {
+        try {
+          // Hide splash screen
+          await SplashScreen.hide();
+
+          // Configure status bar for dark theme
+          await StatusBar.setStyle({ style: Style.Dark });
+
+          // Set status bar background color
+          await StatusBar.setBackgroundColor({ color: '#1a1a1a' });
+        } catch (error) {
+          console.warn('Capacitor plugins not available:', error);
+        }
+      }
+    };
+
+    initializeMobile();
+  }, []);
+
+  const safeAreaStyles = getMobileSafeArea();
+  const platformClass = getPlatformClass();
+
   return (
     <AuthProvider>
       <Router>
-        <div className="flex flex-col min-h-screen">
+        <div className={`flex flex-col min-h-screen ${isNativeMobile() ? 'mobile-safe-area' : ''} ${platformClass}`}
+             style={{
+               paddingTop: safeAreaStyles.paddingTop,
+               paddingBottom: safeAreaStyles.paddingBottom
+             }}>
           <Header />
           <main className="flex-grow">
             <Routes>
