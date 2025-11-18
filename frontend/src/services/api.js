@@ -8,7 +8,7 @@ import {
 
 // Use deployed backend base URL in production; fall back to proxy in dev
 const API_URL = (process.env.REACT_APP_API_BASE || '').trim();
-const USE_MOCK_DATA = false; // Toggle between mock data and real API
+const USE_MOCK_DATA = process.env.REACT_APP_USE_MOCK_DATA === 'true'; // Use environment variable
 
 // Create axios instance with base URL
 const apiClient = axios.create({
