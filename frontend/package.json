@@ -9,6 +9,7 @@
     "@capacitor/haptics": "^7.0.2",
     "@capacitor/ios": "^7.4.4",
     "@capacitor/keyboard": "^7.0.3",
+    "@capacitor/splash-screen": "^7.0.3",
     "@capacitor/status-bar": "^7.0.3",
     "@radix-ui/react-select": "^2.2.6",
     "@testing-library/jest-dom": "^5.16.5",
