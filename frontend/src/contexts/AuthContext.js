@@ -1,6 +1,8 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { apiClient } from '../services/api';
 
+const USE_MOCK_AUTH = process.env.REACT_APP_USE_MOCK_DATA === 'true';
+
 const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
@@ -27,21 +29,41 @@ export const AuthProvider = ({ children }) => {
   const register = async (username, email, password) => {
     try {
       setError('');
+
+      if (USE_MOCK_AUTH) {
+        // Mock registration - accept any non-empty username, email, password
+        if (username && email && password) {
+          const mockToken = btoa(`${username}:${Date.now()}`);
+          localStorage.setItem('token', mockToken);
+          localStorage.setItem('username', username);
+
+          // Set authorization header for all future requests
+          apiClient.defaults.headers.common['Authorization'] = `Bearer ${mockToken}`;
+
+          setCurrentUser({ username });
+          return { success: true };
+        } else {
+          setError('Please fill in all fields');
+          return { success: false, message: 'Please fill in all fields' };
+        }
+      }
+
+      // Real API call
       const response = await apiClient.post('/api/auth/register', {
         username,
         email,
         password
       });
-      
+
       const { token, username: user } = response.data;
-      
+
       if (token) {
         localStorage.setItem('token', token);
         localStorage.setItem('username', user);
-        
+
         // Set authorization header for all future requests
         apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        
+
         setCurrentUser({ username: user });
         return { success: true };
       } else {
@@ -58,20 +80,40 @@ export const AuthProvider = ({ children }) => {
   const login = async (username, password) => {
     try {
       setError('');
+
+      if (USE_MOCK_AUTH) {
+        // Mock authentication - accept any non-empty username/password
+        if (username && password) {
+          const mockToken = btoa(`${username}:${Date.now()}`);
+          localStorage.setItem('token', mockToken);
+          localStorage.setItem('username', username);
+
+          // Set authorization header for all future requests
+          apiClient.defaults.headers.common['Authorization'] = `Bearer ${mockToken}`;
+
+          setCurrentUser({ username });
+          return { success: true };
+        } else {
+          setError('Please enter username and password');
+          return { success: false, message: 'Please enter username and password' };
+        }
+      }
+
+      // Real API call
       const response = await apiClient.post('/api/auth/login', {
         username,
         password
       });
-      
+
       const { token, username: user } = response.data;
-      
+
       if (token) {
         localStorage.setItem('token', token);
         localStorage.setItem('username', user);
-        
+
         // Set authorization header for all future requests
         apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        
+
         setCurrentUser({ username: user });
         return { success: true };
       } else {
