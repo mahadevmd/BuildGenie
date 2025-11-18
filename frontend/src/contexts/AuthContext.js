@@ -29,21 +29,41 @@ export const AuthProvider = ({ children }) => {
   const register = async (username, email, password) => {
     try {
       setError('');
+
+      if (USE_MOCK_AUTH) {
+        // Mock registration - accept any non-empty username, email, password
+        if (username && email && password) {
+          const mockToken = btoa(`${username}:${Date.now()}`);
+          localStorage.setItem('token', mockToken);
+          localStorage.setItem('username', username);
+
+          // Set authorization header for all future requests
+          apiClient.defaults.headers.common['Authorization'] = `Bearer ${mockToken}`;
+
+          setCurrentUser({ username });
+          return { success: true };
+        } else {
+          setError('Please fill in all fields');
+          return { success: false, message: 'Please fill in all fields' };
+        }
+      }
+
+      // Real API call
       const response = await apiClient.post('/api/auth/register', {
         username,
         email,
         password
       });
-      
+
       const { token, username: user } = response.data;
-      
+
       if (token) {
         localStorage.setItem('token', token);
         localStorage.setItem('username', user);
-        
+
         // Set authorization header for all future requests
         apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        
+
         setCurrentUser({ username: user });
         return { success: true };
       } else {
