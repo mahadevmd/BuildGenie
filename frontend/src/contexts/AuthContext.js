@@ -1,6 +1,8 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { apiClient } from '../services/api';
 
+const USE_MOCK_AUTH = process.env.REACT_APP_USE_MOCK_DATA === 'true';
+
 const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
