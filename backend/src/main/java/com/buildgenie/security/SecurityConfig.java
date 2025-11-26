@@ -52,6 +52,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .cors().and()
             .csrf().disable()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+            .headers()
+                .contentTypeOptions().and() // X-Content-Type-Options: nosniff
+                .xssProtection().and()
+                .frameOptions().deny().and()
+                .httpStrictTransportSecurity().includeSubDomains(true).maxAgeInSeconds(31536000).and()
+                .cacheControl().and() // Add Cache-Control/Pragma/Expires on responses
             .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .antMatchers("/api/auth/**").permitAll()
