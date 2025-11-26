@@ -56,7 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .contentTypeOptions().and() // X-Content-Type-Options: nosniff
                 .xssProtection().and()
                 .frameOptions().deny().and()
-                .httpStrictTransportSecurity().includeSubDomains(true).maxAgeInSeconds(31536000).and()
+                // HSTS configured at reverse proxy (nginx) in production; removed here for compatibility
                 .cacheControl().and() // Add Cache-Control/Pragma/Expires on responses
             .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
