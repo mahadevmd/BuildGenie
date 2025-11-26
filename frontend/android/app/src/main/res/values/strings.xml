@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">BuildGenie</string>
+    <string name="title_activity_main">BuildGenie</string>
+    <string name="package_name">com.buildgenie.app</string>
+    <string name="custom_url_scheme">com.buildgenie.app</string>
+</resources>

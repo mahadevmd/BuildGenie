@@ -1,0 +1,20 @@
+{
+  "name": "buildgenie-complete",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "docker-compose -f docker-compose.yml --profile dev up",
+    "build": "docker-compose build",
+    "prod": "docker-compose -f docker-compose.yml up -d",
+    "prod-stop": "docker-compose -f docker-compose.yml down",
+    "logs": "docker-compose logs -f",
+    "mobile:build": "cd frontend && npm run build",
+    "mobile:sync": "cd frontend && npx cap sync",
+    "mobile:android": "cd frontend && npx cap open android",
+    "mobile:ios": "cd frontend && npx cap open ios",
+    "mobile:build-android": "cd frontend && npm run build && npx cap sync android && cd android && ./gradlew assembleRelease",
+    "mobile:build-ios": "cd frontend && npm run build && npx cap sync ios && xcodebuild -workspace ios/App.xcworkspace -scheme App -configuration Release archive"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^5.6.0"
+  }
+}

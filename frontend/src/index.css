@@ -1,0 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --background: 0 0% 7%;
+  --foreground: 0 0% 98%;
+  --card: 0 0% 9%;
+  --card-foreground: 0 0% 98%;
+  --popover: 0 0% 9%;
+  --popover-foreground: 0 0% 98%;
+  --primary: 270 76% 53%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 180 100% 50%;
+  --secondary-foreground: 0 0% 9%;
+  --muted: 0 0% 15%;
+  --muted-foreground: 0 0% 70%;
+  --accent: 270 76% 53%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 0 0% 20%;
+  --input: 0 0% 20%;
+  --ring: 270 76% 53%;
+  --radius: 0.5rem;
+}
+
+body {
+  margin: 0;
+  background-color: #0F0F0F;
+  color: #F5F5F5;
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 300;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+}
+
+h1, h2 {
+  background: linear-gradient(to right, #8A2BE2, #00FFFF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-dark-dark text-foreground;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-dark-light border border-transparent hover:border-primary-light/30 transition-all duration-300 hover:shadow-[0_0_15px_rgba(138,43,226,0.3)];
+  }
+  
+  .btn-primary {
+    @apply bg-primary hover:bg-primary-light text-white transition-all duration-300 hover:shadow-[0_0_10px_rgba(138,43,226,0.6)];
+  }
+  
+  .btn-secondary {
+    @apply bg-transparent border border-secondary text-secondary hover:bg-secondary/10 transition-all duration-300 hover:shadow-[0_0_10px_rgba(0,255,255,0.6)];
+  }
+}
