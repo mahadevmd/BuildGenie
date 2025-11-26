@@ -56,8 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .contentTypeOptions().and() // X-Content-Type-Options: nosniff
                 .xssProtection().and()
                 .frameOptions().deny().and()
-                // HSTS configured at reverse proxy (nginx) in production; removed here for compatibility
-                .cacheControl().and() // Add Cache-Control/Pragma/Expires on responses
+                // HSTS configured at reverse proxy (nginx) in production; cache headers set at proxy or controller
             .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .antMatchers("/api/auth/**").permitAll()
