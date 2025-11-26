@@ -11,6 +11,19 @@ const normalizeBaseUrl = (u) => {
   return withoutTrailing.replace(/\/api\/?$/i, '');
 };
 const API_URL = normalizeBaseUrl(API_URL_RAW);
+// If the frontend is served over HTTPS, prevent mixed content by upgrading
+// an inadvertently configured http:// API base to https://.
+const isHttpsPage = (typeof window !== 'undefined' && window.location?.protocol === 'https:');
+const EFFECTIVE_API_URL = (() => {
+  let url = API_URL;
+  if (!url) return '';
+  if (isHttpsPage && /^http:\/\//i.test(url)) {
+    try {
+      url = url.replace(/^http:\/\//i, 'https://');
+    } catch { /* noop */ }
+  }
+  return url;
+})();
 // Detect Capacitor Android to provide sensible dev fallback when API_URL is empty
 let IS_ANDROID = false;
 try {
@@ -30,7 +43,7 @@ const ANDROID_DEV_BASE = (process.env.REACT_APP_ANDROID_API_BASE || '').trim() |
 // Create axios instance with base URL
 const apiClient = axios.create({
   // In Android WebView, CRA dev proxy is not available. Use 10.0.2.2 fallback when empty.
-  baseURL: API_URL || (IS_ANDROID ? ANDROID_DEV_BASE : undefined),
+  baseURL: EFFECTIVE_API_URL || (IS_ANDROID ? ANDROID_DEV_BASE : undefined),
   headers: {
     'Content-Type': 'application/json'
   }
